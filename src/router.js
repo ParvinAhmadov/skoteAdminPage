@@ -10,7 +10,7 @@ const routers = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: "/joblist",
+        path: "/",
         element: <Home />,
       },
       {

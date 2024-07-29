@@ -76,7 +76,7 @@ const ModalTablee = () => {
           aria-hidden="true"
           className="fixed inset-0 z-1000 flex items-center justify-center bg-black bg-opacity-50"
         >
-          <div className="  max-h-[550px] p-6  max-w-[450px] bg-Textcolor rounded-lg shadow-lg overflow-auto">
+          <div className="  max-h-[550px] p-6  max-w-[450px] w-full bg-Textcolor rounded-lg shadow-lg overflow-auto">
             <div className="flex items-center justify-between  border-b rounded-t border-backColor">
               <h2 className="font-bold text-backColor text-xl">Add New Job.</h2>
               <button

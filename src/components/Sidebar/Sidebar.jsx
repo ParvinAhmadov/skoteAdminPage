@@ -172,7 +172,7 @@ const Sidebar = ({ isOpen }) => {
             </div>
             {actSection === "Jobs" && (
               <div className="jobs_content">
-                <Link to='./joblist' className="jobsItem">Job List</Link>
+                <Link to='/' className="jobsItem">Job List</Link>
                 <Link to='./jobgrid' className="jobsItem">Job Grid</Link>
                 <p className="jobsItem">Apply Job</p>
                 <p className="jobsItem">Job Details</p>

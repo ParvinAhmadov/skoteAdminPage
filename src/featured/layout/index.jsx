@@ -39,7 +39,7 @@ const Layout = () => {
 
           <main>
             
-            {<Outlet />
+            <Outlet />{
             }
           </main>
 

@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+    .sidebar_active{
+        @apply bg-backColor w-[251px] min-h-screen fixed top-0 left-0 transition-transform duration-300;
+    }
+    .dashboard_active{
+ @apply flex items-center justify-between hover:text-white cursor-pointer  transition-colors duration-300;
+    }
+
+    .sidebar_active_text {
+        @apply hover:text-white transition-colors duration-300 ml-[25px] cursor-pointer text-[14px] mb-[5px];
+    }
+    .jobs_active{
+        @apply flex items-center justify-between cursor-pointer gap-2 text-gray-400 group-hover:text-white transition;
+    }
+    .jobs_content{
+        @apply transition-all duration-300 overflow-hidden text-gray-400 py-[16px] text-xs flex flex-col gap-2;
+    }
+    .jobsItem{
+        @apply hover:text-white transition-colors duration-300 ml-[25px] cursor-pointer text-[14px] mb-[5px];
+    }
+    .jobListhome{
+        @apply  flex flex-col min-h-screen gap-4 w-full p-6 text-white bg-Tablebg;
+    }
+    .jobListselect{
+        @apply w-[15%] text-white bg-backColor border rounded border-Listbordercolor text-xs p-2
+    }
+    
+}

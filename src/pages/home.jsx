@@ -23,7 +23,7 @@ const Home = () => {
       const result = await userService.getUsers({ companyName });
       setData(result.data); 
     } catch (error) {
-      setError("Error fetching users"); 
+      setError(); 
     }
   };
 

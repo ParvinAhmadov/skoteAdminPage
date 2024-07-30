@@ -6,10 +6,12 @@ import { FaPen } from "react-icons/fa";
 import { PiTrashSimpleLight } from "react-icons/pi";
 import TableSpinner from "../Spinner/TableSpinner";
 import ModalListt from "../../components/Modal/ModalList";
+import { FaChevronLeft } from "react-icons/fa";
+import { FaChevronRight } from "react-icons/fa";
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
-const JobTable = () => {
+const JobTable = ({ searchTerm }) => {
   const { data, error } = useSWR("http://localhost:3002/joblist", fetcher);
   const [selectedJob, setSelectedJob] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -64,6 +66,10 @@ const JobTable = () => {
   if (error) return <div className="text-red-500">Error loading jobs</div>;
   if (!data) return <TableSpinner />;
 
+  const filteredData = data.filter((job) =>
+    job.jobTitle.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="px-4 py-6">
       <table className="w-full border-collapse">
@@ -84,62 +90,70 @@ const JobTable = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((job) => {
-            const { bgColor, textColor } = getJobTypeStyles(job.type);
-            const statusBgColor = getJobStatusStyles(job.status);
-            return (
-              <tr key={job.id} className="border-b text-sm">
-                <td className="p-3">{job.jobId}</td>
-                <td className="p-3">
-                  <img
-                    className="w-12 h-12 rounded"
-                    src={job.jobImg}
-                    alt="Job"
-                  />
-                </td>
-                <td className="p-3">{job.jobTitle}</td>
-                <td className="p-3">{job.companyName}</td>
-                <td className="p-3">{job.location}</td>
-                <td className="p-3">{job.experience} Years</td>
-                <td className="p-3">{job.Role}</td>
-                <td className="p-3">
-                  <button
-                    className={`w-fit px-2 py-1 rounded ${bgColor} ${textColor}`}
-                  >
-                    {job.type}
-                  </button>
-                </td>
-                <td className="p-3">{job.postedDate}</td>
-                <td className="p-3">{job.lastDate}</td>
-                <td className="p-3">
-                  <div
-                    className={`text-white w-fit px-2 py-1 rounded ${statusBgColor}`}
-                  >
-                    {job.status}
-                  </div>
-                </td>
-                <td className="p-3">
-                  <div className="flex items-center gap-2">
+          {filteredData.length === 0 ? (
+            <tr>
+              <td colSpan="12" className="p-3 text-center text-gray-500">
+                No jobs found
+              </td>
+            </tr>
+          ) : (
+            filteredData.map((job) => {
+              const { bgColor, textColor } = getJobTypeStyles(job.type);
+              const statusBgColor = getJobStatusStyles(job.status);
+              return (
+                <tr key={job.id} className="border-b text-sm">
+                  <td className="p-3">{job.jobId}</td>
+                  <td className="p-3">
+                    <img
+                      className="w-12 h-12 rounded"
+                      src={job.jobImg}
+                      alt="Job"
+                    />
+                  </td>
+                  <td className="p-3">{job.jobTitle}</td>
+                  <td className="p-3">{job.companyName}</td>
+                  <td className="p-3">{job.location}</td>
+                  <td className="p-3">{job.experience} Years</td>
+                  <td className="p-3">{job.role}</td>
+                  <td className="p-3">
                     <button
-                      onClick={() => openModal(job)}
-                      className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                      className={`w-fit px-2 py-1 rounded ${bgColor} ${textColor}`}
                     >
-                      <IoEye />
+                      {job.type}
                     </button>
-                    <button className="bg-green-500 text-white p-2 rounded hover:bg-green-600">
-                      <FaPen />
-                    </button>
-                    <button
-                      onClick={() => handleRemoveJob(job.id)}
-                      className="bg-red-500 text-white p-2 rounded hover:bg-red-600"
+                  </td>
+                  <td className="p-3">{job.postedDate}</td>
+                  <td className="p-3">{job.lastDate}</td>
+                  <td className="p-3">
+                    <div
+                      className={`text-white w-fit px-2 py-1 rounded ${statusBgColor}`}
                     >
-                      <PiTrashSimpleLight />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
+                      {job.status}
+                    </div>
+                  </td>
+                  <td className="p-3">
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => openModal(job)}
+                        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                      >
+                        <IoEye />
+                      </button>
+                      <button className="bg-green-500 text-white p-2 rounded hover:bg-green-600">
+                        <FaPen />
+                      </button>
+                      <button
+                        onClick={() => handleRemoveJob(job.id)}
+                        className="bg-red-500 text-white p-2 rounded hover:bg-red-600"
+                      >
+                        <PiTrashSimpleLight />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
 
@@ -148,6 +162,17 @@ const JobTable = () => {
         closeModal={closeModal}
         selectedItem={selectedJob}
       />
+      <div>
+        <ul className="flex items-center gap-4 justify-end mt-3 ">
+          <li className="text-[8px] text-gray-300">
+            <FaChevronLeft />
+          </li>
+          <span className="bg-[#556EE6] border-none rounded-full w-[30px] h-[30px] text-[13px] flex items-center justify-center p-1 cursor-pointer">1</span>
+          <li className="text-[8px] text-gray-300">
+            <FaChevronRight />
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };

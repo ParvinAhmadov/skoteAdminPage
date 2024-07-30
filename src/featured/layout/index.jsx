@@ -4,7 +4,6 @@ import Header from "./header";
 import Footer from "./footer";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import LoadingSpinner from "../../components/Spinner/LoadingSpinner";
-// import Jobcard from "../../pages/jobcard";
 
 const Layout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -39,8 +38,8 @@ const Layout = () => {
 
           <main>
             
-            <Outlet />{
-            }
+            <Outlet />
+            
           </main>
 
           <Footer />

@@ -1,11 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdRefresh } from "react-icons/io";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import ModalTablee from "../components/Modal/ModalTable";
-import Table from "../components/Table/table";
+import { UserService } from "../services/api";
+import JobTable from '../components/Table/table.jsx';
+
 
 const Home = () => {
+  const handleReset = () => {
+    setSearchTerm("");
+    fetchData();
+  };
+  
   const [inputType, setInputType] = useState("text");
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const fetchData = async (companyName = "") => {
+    const userService = new UserService();
+    try {
+      const result = await userService.getUsers({ companyName });
+      setData(result.data); 
+    } catch (error) {
+      setError("Error fetching users"); 
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleSearchChange = (event) => {
+    const { value } = event.target;
+    setSearchTerm(value);
+    fetchData(value);
+  };
 
   return (
     <>
@@ -21,8 +51,8 @@ const Home = () => {
               <h2 className="font-bold"> Jobs Lists </h2>
             </div>
             <div className="flex items-center gap-1">
-             <ModalTablee/>
-              <button className="text-sm py-[11px] px-3 bg-[#424C68] rounded">
+              <ModalTablee />
+              <button onClick={handleReset} className="text-sm py-[11px] px-3 bg-[#424C68] rounded">
                 <IoMdRefresh />
               </button>
               <button className="text-sm py-[11px] px-3 bg-[#34C38F] rounded">
@@ -41,9 +71,11 @@ const Home = () => {
             <input
               type="text"
               placeholder="Search for ..."
-              className="w-[30%] bg-backColor border rounded border-Listbordercolor text-xs p-2  focus:outline-none focus:ring-1 focus:ring-white"
+              className="w-[30%] bg-backColor border rounded border-Listbordercolor text-xs p-2 focus:outline-none focus:ring-1 focus:ring-white"
+              value={searchTerm}
+              onChange={handleSearchChange}
             />
-            <select className="w-[12%] bg-backColor border rounded border-Listbordercolor text-xs p-2  focus:outline-none focus:ring-1 focus:ring-white font-semibold">
+            <select className="w-[12%] bg-backColor border rounded border-Listbordercolor text-xs p-2 focus:outline-none focus:ring-1 focus:ring-white font-semibold">
               <option className="font-semibold" disabled defaultValue>
                 Status
               </option>
@@ -52,7 +84,7 @@ const Home = () => {
               <option className="font-semibold">New</option>
               <option className="font-semibold">Close</option>
             </select>
-            <select className="w-[12%] bg-backColor border rounded border-Listbordercolor text-xs p-2  focus:outline-none focus:ring-1 focus:ring-white font-semibold">
+            <select className="w-[12%] bg-backColor border rounded border-Listbordercolor text-xs p-2 focus:outline-none focus:ring-1 focus:ring-white font-semibold">
               <option className="font-semibold">Select Type</option>
               <option className="font-semibold">Active</option>
               <option className="font-semibold">Full Time</option>
@@ -60,13 +92,14 @@ const Home = () => {
             </select>
             <input
               placeholder="Select time"
-              className="w-[15%] text-white bg-backColor border-Listbordercolor text-xs p-2 mr-[23px]  focus:outline-none focus:ring-1 focus:ring-white font-semibold rounded"
+              className="w-[15%] text-white bg-backColor border-Listbordercolor text-xs p-2 mr-[23px] focus:outline-none focus:ring-1 focus:ring-white font-semibold rounded"
               type={inputType}
               onFocus={() => setInputType("datetime-local")}
               onBlur={() => setInputType("text")}
             />
           </div>
-          <Table/>
+          <JobTable searchTerm={searchTerm} /> 
+          {error && <div>{error}</div>}
         </div>
       </div>
     </>
